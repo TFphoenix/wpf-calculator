@@ -1,0 +1,45 @@
+﻿<Window x:Class="Calculator.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Calculator"
+        mc:Ignorable="d"
+        Title="Teodor's Calculator - About"
+        Height="180" Width="400"
+        ResizeMode="NoResize">
+
+    <Window.Resources>
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="Margin" Value="0 3 0 3"/>
+        </Style>
+    </Window.Resources>
+
+    <StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Label>
+                <Bold>Programmer's Name:</Bold>
+            </Label>
+            <Label x:Name="Name" Content="Teodor Mihăescu"></Label>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Label>
+                <Bold>Number of logical processors:</Bold>
+            </Label>
+            <Label x:Name="Processors" Content=""></Label>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Label>
+                <Bold>Operating System Version:</Bold>
+            </Label>
+            <Label x:Name="OsVersion" Content=""></Label>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Label>
+                <Hyperlink x:Name="Link" NavigateUri="https://intranet.unitbv.ro/Mihaescu_Teodor" RequestNavigate="Link_OnRequestNavigate">
+                    <Bold>Link to educational page</Bold>
+                </Hyperlink>
+            </Label>
+        </StackPanel>
+    </StackPanel>
+</Window>

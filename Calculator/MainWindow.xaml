@@ -1,0 +1,357 @@
+﻿<Window x:Class="Calculator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Calculator"
+        mc:Ignorable="d"
+        Title="Calculator"
+        Height="780" Width="600"
+        MinHeight="540" MinWidth="380"
+        WindowStyle="None" Icon="Resources/calculator.ico" FontFamily="Lato"
+        Keyboard.KeyDown ="MainWindow_OnKeyDown">
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="34" />
+    </WindowChrome.WindowChrome>
+
+    <Window.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#434A54" Offset="0.0" />
+            <GradientStop Color="#434A54" Offset="1.0" />
+        </LinearGradientBrush>
+    </Window.Background>
+
+    <Window.Resources>
+        <!--Base style for title bar buttons-->
+        <Style x:Key="CaptionButtonStyle" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid x:Name="LayoutRoot" Background="Transparent" Width="44" Height="30">
+                            <TextBlock x:Name="txt" Text="{TemplateBinding Content}" FontFamily="Segoe MDL2 Assets" FontSize="10" 
+                                   Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   RenderOptions.ClearTypeHint="Auto" TextOptions.TextRenderingMode="Aliased"  TextOptions.TextFormattingMode="Display"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="LayoutRoot" Property="Background" Value="#E5E5E5"/>
+                                <Setter TargetName="txt" Property="Foreground" Value="#000000"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--Minimize-->
+        <Style x:Key="MinimizeButtonStyle" TargetType="Button" BasedOn="{StaticResource CaptionButtonStyle}">
+            <Setter Property="Content" Value="&#xE949;"/>
+        </Style>
+
+        <!--Maximize-->
+        <Style x:Key="MaximizeButtonStyle" TargetType="Button" BasedOn="{StaticResource CaptionButtonStyle}">
+            <Setter Property="Content" Value="&#xE739;"/>
+        </Style>
+
+        <!--Restore-->
+        <Style x:Key="RestoreButtonStyle" TargetType="Button" BasedOn="{StaticResource CaptionButtonStyle}">
+            <Setter Property="Content" Value="&#xE923;"/>
+        </Style>
+
+        <!--Close-->
+        <Style x:Key="CloseButtonStyle" TargetType="Button" BasedOn="{StaticResource CaptionButtonStyle}">
+            <Setter Property="Content" Value="&#xE106;"/>
+        </Style>
+
+        <!--Content Buttons-->
+        <Style x:Key="GreenButton" TargetType="{x:Type Button}">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Light"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#48CFAD" Offset="0.0" />
+                        <GradientStop Color="#48CFAD" Offset="0.5" />
+                        <GradientStop Color="#37BC9B" Offset="0.5" />
+                        <GradientStop Color="#37BC9B" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#52D9B7" Offset="0.0" />
+                                <GradientStop Color="#52D9B7" Offset="0.5" />
+                                <GradientStop Color="#41C6A5" Offset="0.5" />
+                                <GradientStop Color="#41C6A5" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#3EC5A4" Offset="0.0" />
+                                <GradientStop Color="#3EC5A4" Offset="0.5" />
+                                <GradientStop Color="#2DB291" Offset="0.5" />
+                                <GradientStop Color="#2DB291" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#ababab" Offset="0.0" />
+                                <GradientStop Color="#ababab" Offset="0.5" />
+                                <GradientStop Color="#a1a1a1" Offset="0.5" />
+                                <GradientStop Color="#a1a1a1" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="OrangeButton" TargetType="{x:Type Button}">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Light"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#FC6E51" Offset="0.0" />
+                        <GradientStop Color="#FC6E51" Offset="0.5" />
+                        <GradientStop Color="#E9573F" Offset="0.5" />
+                        <GradientStop Color="#E9573F" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#FF785B" Offset="0.0" />
+                                <GradientStop Color="#FF785B" Offset="0.5" />
+                                <GradientStop Color="#EE6249" Offset="0.5" />
+                                <GradientStop Color="#EE6249" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#FC6E51" Offset="0.0" />
+                                <GradientStop Color="#FC6E51" Offset="0.5" />
+                                <GradientStop Color="#E9573F" Offset="0.5" />
+                                <GradientStop Color="#E9573F" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#ababab" Offset="0.0" />
+                                <GradientStop Color="#ababab" Offset="0.5" />
+                                <GradientStop Color="#a1a1a1" Offset="0.5" />
+                                <GradientStop Color="#a1a1a1" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="BlueButton" TargetType="{x:Type Button}">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Light"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="#2B9CFD" Offset="0.0" />
+                        <GradientStop Color="#2B9CFD" Offset="0.5" />
+                        <GradientStop Color="#278DD8" Offset="0.5" />
+                        <GradientStop Color="#278DD8" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#34A6FF" Offset="0.0" />
+                                <GradientStop Color="#34A6FF" Offset="0.5" />
+                                <GradientStop Color="#3196E2" Offset="0.5" />
+                                <GradientStop Color="#3196E2" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#2192F3" Offset="0.0" />
+                                <GradientStop Color="#2192F3" Offset="0.5" />
+                                <GradientStop Color="#1D83CE" Offset="0.5" />
+                                <GradientStop Color="#1D83CE" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Color="#ababab" Offset="0.0" />
+                                <GradientStop Color="#ababab" Offset="0.5" />
+                                <GradientStop Color="#a1a1a1" Offset="0.5" />
+                                <GradientStop Color="#a1a1a1" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <!--Title bar button commands-->
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static SystemCommands.CloseWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed_Close" />
+        <CommandBinding Command="{x:Static SystemCommands.MaximizeWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed_Maximize" />
+        <CommandBinding Command="{x:Static SystemCommands.MinimizeWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed_Minimize" />
+        <CommandBinding Command="{x:Static SystemCommands.RestoreWindowCommand}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed_Restore" />
+    </Window.CommandBindings>
+
+
+    <!--Content-->
+    <Border x:Name="MainWindowBorder" BorderBrush="#2F3640" BorderThickness="0" >
+        <Grid  Margin="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="10"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="0.5*"></RowDefinition>
+                <RowDefinition Height="1.5*"></RowDefinition>
+                <RowDefinition Height="0.75*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="10"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <!--Window chrome-->
+            <Grid ColumnSpan="6" Grid.Row="0" Height="30" Background="#2F3640">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <!--App icon-->
+                    <Image Source="/Resources/calculator.ico" Width="18" Margin="15 2 2 2" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <TextBlock Text="Teodor's Calculator" VerticalAlignment="Center" FontSize="13" FontFamily="Lato" Foreground="White" Margin="8 3 0 0" />
+                </StackPanel>
+
+                <!--Caption buttons-->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                    <Button Style="{StaticResource MinimizeButtonStyle}" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="Minimize"
+                        Command="{x:Static SystemCommands.MinimizeWindowCommand}"/>
+                    <Button x:Name="RestoreButton" Visibility="Collapsed" Style="{StaticResource RestoreButtonStyle}" 
+                        Command="{x:Static SystemCommands.RestoreWindowCommand}" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="Restore"/>
+                    <Button x:Name="MaximizeButton" Visibility="Visible" Style="{StaticResource MaximizeButtonStyle}" 
+                        Command="{x:Static SystemCommands.MaximizeWindowCommand}" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="Maximize" />
+                    <Button Style="{StaticResource CloseButtonStyle}" WindowChrome.IsHitTestVisibleInChrome="True" ToolTip="Close"
+                        Command="{x:Static SystemCommands.CloseWindowCommand}"/>
+                </StackPanel>
+            </Grid>
+
+            <!--Menu Bar-->
+            <Menu Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Name="Menu" Height="35" Width="1000" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="15" Padding="0 2 0 0" Foreground="White"  Background="Transparent" BorderThickness="2">
+                <MenuItem Header="_Edit" >
+                    <MenuItem Header="Copy (_C)" Click="OnCopy" BorderBrush="#2F3640" Background="#2F3640"/>
+                    <MenuItem Header="Paste (_V)" Click="OnPaste"  BorderBrush="#2F3640" Background="#2F3640"/>
+                    <MenuItem Header="Cut (_X)" Click="OnCut" BorderBrush="#2F3640" Background="#2F3640"/>
+                    <Separator/>
+                    <MenuItem Header="_Digit Grouping" IsCheckable="True" IsChecked="{Binding Path=IsGroupSeparatorOn, Mode=TwoWay}" BorderBrush="#2F3640" Background="#2F3640"/>
+                </MenuItem>
+                <MenuItem Header="_Help" Margin="5 0 0 0">
+                    <MenuItem Header="_About" Click="About_OnClick" BorderBrush="#2F3640" Background="#2F3640"/>
+                </MenuItem>
+            </Menu>
+
+            <!--Calculator-->
+            <TextBox x:Name="ScreenTextBox" Text="{Binding Path=ScreenText, Mode=TwoWay}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4" IsReadOnly="True" Margin="5" Padding="10" Background="#CCD1D9" VerticalContentAlignment="Center" TextAlignment="Right" FontFamily="Lato" FontWeight="Black" FontSize="50" Foreground="#2F3640"/>
+            <Button x:Name="BtnMc" Click="Memory_OnClick" IsEnabled="{Binding Path=IsNotInErrorState, Mode=OneWay}" Style="{StaticResource BlueButton}" Grid.Row="3" Grid.Column="1" Content="MC" BorderThickness="0" Margin="5"/>
+            <Button x:Name="BtnMr" Click="Memory_OnClick" IsEnabled="{Binding Path=IsNotInErrorState, Mode=OneWay}" Style="{StaticResource BlueButton}" Grid.Row="3" Grid.Column="2" Content="MR" BorderThickness="0" Margin="5"/>
+            <Button x:Name="BtnMp" Click="Memory_OnClick" IsEnabled="{Binding Path=IsNotInErrorState, Mode=OneWay}" Style="{StaticResource BlueButton}" Grid.Row="3" Grid.Column="3" Content="M+" BorderThickness="0" Margin="5"/>
+            <Button x:Name="BtnMm" Click="Memory_OnClick" IsEnabled="{Binding Path=IsNotInErrorState, Mode=OneWay}" Style="{StaticResource BlueButton}" Grid.Row="3" Grid.Column="4" Content="M-" BorderThickness="0" Margin="5"/>
+            <Button x:Name="BtnPrc" Click="Operator_OnClick" IsEnabled="{Binding Path=IsNotInErrorState, Mode=OneWay}" Style="{StaticResource GreenButton}" Grid.Row="4" Grid.Column="1" Content="%" BorderThickness="0" Margin="5"/>
+            <Button x:Name="BtnCe" Click="Control_OnClick" Style="{StaticResource GreenButton}" Grid.Row="4" Grid.Column="2" Content="CE" BorderThickness="0" Margin="5"/>
+            <Button x:Name="BtnC" Click="Control_OnClick" Style="{StaticResource GreenButton}" Grid.Row="4" Grid.Column="3" Content="C" BorderThickness="0" Margin="5"/>
+            <Button x:Name="BtnDel" Click="Control_OnClick" Style="{StaticResource GreenButton}" Grid.Row="4" Grid.Column="4" Content="DEL" BorderThickness="0" Margin="5"/>
+            <Button x:Name="BtnRev" Click="Operator_OnClick" IsEnabled="{Binding Path=IsNotInErrorState, Mode=OneWay}" Style="{StaticResource GreenButton}" Grid.Row="5" Grid.Column="1" Content="1/x" BorderThickness="0" Margin="5"/>
+            <Button x:Name="BtnPow" Click="Operator_OnClick" IsEnabled="{Binding Path=IsNotInErrorState, Mode=OneWay}" Style="{StaticResource GreenButton}" Grid.Row="5" Grid.Column="2" Content="x^2" BorderThickness="0" Margin="5"/>
+            <Button x:Name="BtnSqr" Click="Operator_OnClick" IsEnabled="{Binding Path=IsNotInErrorState, Mode=OneWay}" Style="{StaticResource GreenButton}" Grid.Row="5" Grid.Column="3" Content="sqrt(x)" BorderThickness="0" Margin="5"/>
+            <Button x:Name="BtnDiv" Click="Operator_OnClick" IsEnabled="{Binding Path=IsNotInErrorState, Mode=OneWay}" Style="{StaticResource GreenButton}" Grid.Row="5" Grid.Column="4" Content="/" BorderThickness="0" Margin="5"/>
+            <Button x:Name="Btn7" Click="Digit_OnClick" Style="{StaticResource GreenButton}" Grid.Row="6" Grid.Column="1" Content="7" BorderThickness="0" Margin="5"/>
+            <Button x:Name="Btn8" Click="Digit_OnClick" Style="{StaticResource GreenButton}" Grid.Row="6" Grid.Column="2" Content="8" BorderThickness="0" Margin="5"/>
+            <Button x:Name="Btn9" Click="Digit_OnClick" Style="{StaticResource GreenButton}" Grid.Row="6" Grid.Column="3" Content="9" BorderThickness="0" Margin="5"/>
+            <Button x:Name="BtnMlt" Click="Operator_OnClick" IsEnabled="{Binding Path=IsNotInErrorState, Mode=OneWay}" Style="{StaticResource GreenButton}" Grid.Row="6" Grid.Column="4" Content="*" BorderThickness="0" Margin="5"/>
+            <Button x:Name="Btn4" Click="Digit_OnClick" Style="{StaticResource GreenButton}" Grid.Row="7" Grid.Column="1" Content="4" BorderThickness="0" Margin="5"/>
+            <Button x:Name="Btn5" Click="Digit_OnClick" Style="{StaticResource GreenButton}" Grid.Row="7" Grid.Column="2" Content="5" BorderThickness="0" Margin="5"/>
+            <Button x:Name="Btn6" Click="Digit_OnClick" Style="{StaticResource GreenButton}" Grid.Row="7" Grid.Column="3" Content="6" BorderThickness="0" Margin="5"/>
+            <Button x:Name="BtnMin" Click="Operator_OnClick" IsEnabled="{Binding Path=IsNotInErrorState, Mode=OneWay}" Style="{StaticResource GreenButton}" Grid.Row="7" Grid.Column="4" Content="-" BorderThickness="0" Margin="5"/>
+            <Button x:Name="Btn1" Click="Digit_OnClick" Style="{StaticResource GreenButton}" Grid.Row="8" Grid.Column="1" Content="1" BorderThickness="0" Margin="5"/>
+            <Button x:Name="Btn2" Click="Digit_OnClick" Style="{StaticResource GreenButton}" Grid.Row="8" Grid.Column="2" Content="2" BorderThickness="0" Margin="5"/>
+            <Button x:Name="Btn3" Click="Digit_OnClick" Style="{StaticResource GreenButton}" Grid.Row="8" Grid.Column="3" Content="3" BorderThickness="0" Margin="5"/>
+            <Button x:Name="BtnPls" Click="Operator_OnClick" IsEnabled="{Binding Path=IsNotInErrorState, Mode=OneWay}" Style="{StaticResource GreenButton}" Grid.Row="8" Grid.Column="4" Content="+" BorderThickness="0" Margin="5"/>
+            <Button x:Name="BtnSgn" Click="Control_OnClick" IsEnabled="{Binding Path=IsNotInErrorState, Mode=OneWay}" Style="{StaticResource GreenButton}" Grid.Row="9" Grid.Column="1" Content="+/-" BorderThickness="0" Margin="5"/>
+            <Button x:Name="Btn0" Click="Digit_OnClick" Style="{StaticResource GreenButton}" Grid.Row="9" Grid.Column="2" Content="0" BorderThickness="0" Margin="5"/>
+            <Button x:Name="BtnDot" Click="Control_OnClick" IsEnabled="{Binding Path=IsNotInErrorState, Mode=OneWay}" Style="{StaticResource GreenButton}" Grid.Row="9" Grid.Column="3" Content="." BorderThickness="0" Margin="5"/>
+            <Button x:Name="BtnEql" Click="Equals_OnClick" IsEnabled="{Binding Path=IsNotInErrorState, Mode=OneWay}" Style="{StaticResource OrangeButton}" Grid.Row="9" Grid.Column="4" Content="=" BorderThickness="0" Margin="5"/>
+        </Grid>
+    </Border>
+</Window>
